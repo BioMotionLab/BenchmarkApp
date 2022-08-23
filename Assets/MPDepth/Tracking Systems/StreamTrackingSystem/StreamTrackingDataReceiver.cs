@@ -16,6 +16,8 @@ namespace StreamTrackingSystem
         protected override void SetData(RawTrackingData receivedData)
         {
             ReceivedData = receivedData;
+            Debug.Log("Stream Data: " + System.DateTime.Now.ToString());
+
         }
 
         public void SetPort(int newPort)

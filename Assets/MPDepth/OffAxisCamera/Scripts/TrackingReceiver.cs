@@ -7,8 +7,9 @@ namespace OffAxisCamera
     public class TrackingReceiver : MonoBehaviour
     {
         [SerializeField] bool debugOverride = false;
-
+        [SerializeField] Transform calibrationTransform;
         Vector3 initialPosition;
+        public Vector3 pos;
         OffAxisCameraRig offAxisCameraRig;
 
         private void OnEnable()
@@ -21,6 +22,7 @@ namespace OffAxisCamera
             if (debugOverride) return;
             if (offAxisCameraRig.TrackingDisabled) return;
             // clamp z pos
+
             trackedPosition.z = Mathf.Max(trackedPosition.z, 0.00001f);
             // set pos to the tracked position
             this.transform.localPosition = trackedPosition;

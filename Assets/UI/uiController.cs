@@ -4,6 +4,7 @@ using StreamTrackingSystem;
 using System.Net;
 using UnityEngine.UI;
 using UnityEngine;
+using MPDepthCore;
 
 public class uiController : MonoBehaviour
 {
@@ -44,6 +45,9 @@ public class uiController : MonoBehaviour
         streamTrackingCalibrator.manualCalibrationDistance = float.Parse(streamCalibrationInputField.text);
         streamTrackingCalibrator.CalculateCalibrationFromTrackingInfo();
         streamCalibrationCanvas.SetActive(false);
+
+        
+        
     }
 
     public void CancelStreamCalibration()

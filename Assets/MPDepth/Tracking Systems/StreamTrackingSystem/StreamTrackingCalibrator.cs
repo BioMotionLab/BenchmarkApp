@@ -26,6 +26,8 @@ namespace StreamTrackingSystem {
         GameObject mainUI;
         OffAxisCameraRig offAxisCameraRig;
         Camera offAxisCamera;
+        [SerializeField] TrackingSystemsManager tsm;
+
 
         private void Awake()
         {
@@ -81,10 +83,9 @@ namespace StreamTrackingSystem {
 
 
             calibrationTransform.position = tempOffset.transform.position;
-            // calibrationTransform.rotation = new Quaternion(0, 0, 0, 0);
+            calibrationTransform.rotation = tempOffset.transform.rotation;
 
             Destroy(tempFace);
-            
             // Destroy(tempFace);
         }
 

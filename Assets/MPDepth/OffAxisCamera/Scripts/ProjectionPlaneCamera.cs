@@ -14,6 +14,7 @@ namespace OffAxisCamera
         [SerializeField] bool drawGizmos = true;
         [SerializeField] Transform calibrationTransform;
         [SerializeField] Transform OtherPlayerTracker;
+        public Vector3 calibratedTrackingData;
    
         const float MinZThreshold = 0.001f;
         Vector3 eyePos; // the vector from the eyes to projection screen corners
@@ -72,7 +73,7 @@ namespace OffAxisCamera
                 Matrix4x4 P = Matrix4x4.Frustum(l, r, b, t, n, f); // create the projection matrix
 
                 // setup projection camera matrices 
-                ApplyCalibration(eyePos);
+                //ApplyCalibration(eyePos);
                 Matrix4x4 T = Matrix4x4.Translate(-eyePos);
                 Matrix4x4 R = Matrix4x4.Rotate(Quaternion.Inverse(transform.rotation) * projectionScreen.transform.rotation);
                 cam.worldToCameraMatrix = M * R  * T;
@@ -119,9 +120,21 @@ namespace OffAxisCamera
         void ApplyCalibration(Vector3 rawPosition)
         {
             Vector3 pos = calibrationTransform.TransformPoint(rawPosition);
+            calibratedTrackingData = -pos;
             eyePos = pos;
 
         }
+
+        Matrix4x4 SetUpCalibrationMatrix()
+        {
+            Matrix4x4 T_SVB = Matrix4x4.Translate(calibrationTransform.position);
+            /* Matrix4x4 T_SVB = Matrix4x4.Rotate(calibrationTransform.rotation);
+             T_SVB.m03 = calibrationTransform.position.x;
+             T_SVB.m13 = calibrationTransform.position.y;
+             T_SVB.m23 = calibrationTransform.position.z;*/
+            return T_SVB;
+        }
+        
 
     }
 }

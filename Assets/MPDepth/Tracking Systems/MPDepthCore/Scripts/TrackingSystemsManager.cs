@@ -21,6 +21,7 @@ namespace MPDepthCore
         [SerializeField] List<TrackingSystem> trackingSystems = new List<TrackingSystem>();
 
         [SerializeField] ToggleUserEvent parallaxToggleEvent;
+        [SerializeField] Transform calibrationTransform;
 
         [SerializeField] public CalibratedTrackingData CurrentCalibratedTrackingData;
 
@@ -57,15 +58,24 @@ namespace MPDepthCore
             else offAxisCameraRig.DisableCameraTracking();
         }
 
-
+        void ApplyCalibration(MPDepthTrackingData data)
+        {
+            Vector3 pos = calibrationTransform.TransformPoint(data.CameraTrackingData.Position);
+            var rot = calibrationTransform.rotation * Quaternion.Euler(data.CameraTrackingData.Eulers);
+            CurrentCalibratedTrackingData.CameraTrackingData.Position = pos;
+            CurrentCalibratedTrackingData.CameraTrackingData.Eulers = rot.eulerAngles;
+            CurrentCalibratedTrackingData.IsTracking = true;
+        }
 
         void TrackingDataWasUpdated(MPDepthTrackingData data)
         {
+            ApplyCalibration(data);
             TrackingDataUpdated?.Invoke(data);
-            offAxisCameraRig.UpdateCameraLocation(data.CameraTrackingData.Position);
+            offAxisCameraRig.UpdateCameraLocation(CurrentCalibratedTrackingData.CameraTrackingData.Position);
         }
         public void StartCalibration()
         {
+            //currentTrackingSystem.TurnOff();
             currentTrackingSystem.TrackingCalibrationProvider.Calibrate();
             currentTrackingSystem.ScreenCalibrationProvider.Calibrate();
 

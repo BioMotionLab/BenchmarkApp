@@ -69,9 +69,9 @@ namespace MPDepthCore
 
         void TrackingDataWasUpdated(MPDepthTrackingData data)
         {
-            ApplyCalibration(data);
+            //ApplyCalibration(data);
             TrackingDataUpdated?.Invoke(data);
-            offAxisCameraRig.UpdateCameraLocation(CurrentCalibratedTrackingData.CameraTrackingData.Position);
+            offAxisCameraRig.UpdateCameraLocation(data.CameraTrackingData.Position);
         }
         public void StartCalibration()
         {

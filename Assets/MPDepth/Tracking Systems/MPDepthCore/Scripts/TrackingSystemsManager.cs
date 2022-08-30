@@ -41,7 +41,7 @@ namespace MPDepthCore
             foreach (TrackingSystem trackingSystem in trackingSystems)
             {
                 trackingSystem.TurnOff();
-               // trackingSystemsDropdown.options.Add(new Dropdown.OptionData(trackingSystem.name));
+                trackingSystemsDropdown.options.Add(new Dropdown.OptionData(trackingSystem.name));
             }
             instance = this;
 
@@ -117,28 +117,7 @@ namespace MPDepthCore
 
         public void SelectSystem(int selectedIndex)
         {
-            if (selectedIndex > 0)
-            {
-                TrackingSystem newTrackingSystem;
-                try
-                {
-                    newTrackingSystem = trackingSystems[selectedIndex - 1];
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    if (TrackingSystems.Count == 0)
-                    {
-                        Debug.LogError("No Tracking Systems defined!");
-                        throw;
-                    }
-
-                    Debug.LogWarning($"Saved Tracking System index out of range {selectedIndex}, reverting to default.");
-                    newTrackingSystem = trackingSystems[0];
-
-                }
-                ChangeSystemTo(newTrackingSystem);
-                SelectCalibration(0);
-            }
+            currentTrackingSystem = trackingSystems[selectedIndex];
         }
 
         public void ChangeSystemTo(TrackingSystem newTrackingSystem)

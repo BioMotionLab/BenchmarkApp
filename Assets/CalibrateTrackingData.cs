@@ -33,12 +33,12 @@ public class CalibrateTrackingData : MonoBehaviour
         Matrix4x4 GSB = TAB * GSA;
 
         Matrix4x4 ScreenOrientationB = Matrix4x4.Rotate(calibrationTransform.localRotation);
-        Matrix4x4 tmp2 = (ScreenOrientationB) * Matrix4x4.Translate(calibrationTransform.position);
+        Matrix4x4 tmp2 = Matrix4x4.Translate(calibrationTransform.position);
 
         Matrix4x4 TCSB = ScreenOrientationB;
-        TCSB.m03 = tmp2.m03;
-        TCSB.m13 = tmp2.m13;
-        TCSB.m23 = tmp2.m23;
+        TCSB.m03 = -tmp2.m03;
+        TCSB.m13 = -tmp2.m13;
+        TCSB.m23 = -tmp2.m23;
         TCSB.m33 = 1;
 
         Matrix4x4 VCB = Matrix4x4.Translate(position);

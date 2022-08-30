@@ -79,12 +79,12 @@ namespace StreamTrackingSystem
             tempOffset.transform.parent = tempFace.transform;
             tempOffset.name = "tempOffset";
 
-            Vector3 flippedPos = -trackingData.CameraTrackingData.Position;
+            Vector3 flippedPos = trackingData.CameraTrackingData.Position;
             tempOffset.transform.localPosition = new Vector3(flippedPos.x, flippedPos.y, flippedPos.z);
             tempOffset.transform.localEulerAngles = Vector3.zero;
 
 
-            calibrationTransform.position = tempOffset.transform.position;
+            calibrationTransform.position = new Vector3(tempOffset.transform.position.x, tempOffset.transform.position.y, tempOffset.transform.position.z * -1);
             calibrationTransform.rotation = tempOffset.transform.rotation;
 
             Destroy(tempFace);

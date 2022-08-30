@@ -7,25 +7,47 @@ using UnityEngine.UIElements;
 
 namespace MPDepthCore.Calibration.Camera {
     public abstract class TrackingCalibrationProvider : MonoBehaviour {
-        [SerializeField] public Transform calibrationTransform;
+        [SerializeField]  public Transform calibrationTransform;
         public abstract TrackerOffsetCalibration GetTrackerOffsetCalibration {get; }
         public abstract SavedTrackerCalibration CurrentTrackerCalibration { get; }
         
         public abstract List<SavedTrackerCalibration> AllCalibrations { get; }
-        
+
 
         public abstract void Calibrate();
 
+
         void OnEnable() {
-         
+            if (File.Exists(FilePath))
+            {
+                string json = File.ReadAllText(FilePath);
+                LoadSelfFromJson(json);
+            }
+            FinishSetupAfterLoad();
+
+            if (AllCalibrations.Count == 0)
+            {
+                SetCurrentToDefaultCalibration();
+            }
         }
+        protected abstract void FinishSetupAfterLoad();
 
+        protected abstract void SetCurrentToDefaultCalibration();
 
-
-        
+        protected abstract void LoadSelfFromJson(string json);
+        protected abstract string GetSelfAsJson();
         void OnDisable() {
-           
+            Directory.CreateDirectory(BaseFolder);
+            string json = GetSelfAsJson();
+            File.WriteAllText(FilePath, json);
         }
+
+        public void SetCalibrationTransform(Transform t)
+        {
+            calibrationTransform = t;
+        }
+
+
         
         protected string FilePath => Path.Combine(BaseFolder, Filename);
         protected abstract string Filename { get; }

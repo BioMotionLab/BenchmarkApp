@@ -35,6 +35,11 @@ namespace OffAxisCamera
             trackingDisabled = false;
         }
 
+        public bool GetTrackingDisabled()
+        {
+            return trackingDisabled;
+        }
+
         public void UpdateCameraLocation(Vector3 position)
         {
             if (!trackingDisabled)
@@ -42,6 +47,8 @@ namespace OffAxisCamera
                 CameraLocationUpdated?.Invoke(position);
             }
         }
+
+       
 
         internal delegate void UpdateCameraLocationEvent(Vector3 position);
         internal event UpdateCameraLocationEvent CameraLocationUpdated;

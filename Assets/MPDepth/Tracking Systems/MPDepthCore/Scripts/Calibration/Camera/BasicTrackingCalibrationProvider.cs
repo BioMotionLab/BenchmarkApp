@@ -50,6 +50,26 @@ namespace MPDepthCore.Calibration.Camera {
             calibrationTransform.position = currentTrackerCalibration.OffsetCalibration.Position;
         }
 
+        protected override void FinishSetupAfterLoad()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SetCurrentToDefaultCalibration()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void LoadSelfFromJson(string json)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string GetSelfAsJson()
+        {
+            throw new NotImplementedException();
+        }
+
         [Serializable]
         public class SavedTrackerBasicCalibration : SavedTrackerCalibration {
             

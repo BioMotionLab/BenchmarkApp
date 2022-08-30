@@ -39,21 +39,32 @@ public class MotiveTrackingCalibration : MonoBehaviour
     {
         calibrationTransform.position = Vector3.zero;
         calibrationTransform.rotation = Quaternion.Euler(Vector3.zero);
-        offAxisCamera.transform.localPosition = new Vector3(0, 0, 0);
-        GameObject tempFace = new GameObject();
 
-        tempFace.transform.eulerAngles = new Vector3(TrackedScreen.eulerAngles.x, TrackedScreen.eulerAngles.y, TrackedScreen.eulerAngles.z);
+        Vector3 camPos = new Vector3(0, 0, trackingData.CameraTrackingData.Position.z);
+        offAxisCamera.transform.localPosition = camPos;
+        GameObject tempFace = new GameObject();
+        tempFace.transform.position = offAxisCamera.transform.localPosition;
+        Vector3 flippedEulers = -trackingData.CameraTrackingData.Eulers;
+        tempFace.transform.eulerAngles = new Vector3(0, 180, 0) - new Vector3(flippedEulers.x, -flippedEulers.y, flippedEulers.z);
         tempFace.name = "tempFace";
 
         GameObject tempOffset = new GameObject();
         tempOffset.transform.parent = tempFace.transform;
         tempOffset.name = "tempOffset";
 
-    
-        //calibrationTransform.position = tempOffset.transform.position;
-       // Debug.Log(calibrationTransform.position);
+        Vector3 flippedPos = -trackingData.CameraTrackingData.Position;
+        tempOffset.transform.localPosition = new Vector3(flippedPos.x, flippedPos.y, flippedPos.z);
+        tempOffset.transform.localEulerAngles = Vector3.zero;
+
+
+        calibrationTransform.position = tempOffset.transform.position;
         calibrationTransform.rotation = tempOffset.transform.rotation;
-        Debug.Log(calibrationTransform.rotation);
+        MotiveTrackingProvider.SavedMotiveTrackingConfiguration calibration = new MotiveTrackingProvider.SavedMotiveTrackingConfiguration();
+        calibration.TrackerOffsetCalibration.Position = calibrationTransform.position;
+        calibration.TrackerOffsetCalibration.Eulers = calibrationTransform.rotation.eulerAngles;
+        calibration.name = System.DateTime.Now.ToString();
+        GetComponent<MotiveTrackingProvider>().SaveCalibration(calibration);
+        Destroy(tempFace);
     }
 
     void TrackingUpdated(MPDepthTrackingData data)

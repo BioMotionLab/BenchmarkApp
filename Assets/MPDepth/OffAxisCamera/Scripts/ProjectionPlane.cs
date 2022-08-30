@@ -24,6 +24,7 @@ SOFTWARE.
 */
 
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -37,13 +38,10 @@ namespace OffAxisCamera
     class ProjectionPlane : MonoBehaviour
     {
 
-
         [SerializeField] OffAxisCameraRig offAxisCameraRig;
-
-        [SerializeField] Vector2 size = new Vector2(8, 4.5f);
+        [SerializeField] public Vector2 size = new Vector2(8, 4.5f);
         [SerializeField] Vector2 aspectRatio = new Vector2(16, 9);
         [SerializeField] bool lockAspectRatio = true;
-
         [SerializeField] bool drawGizmo = true;
 
         [SerializeField] bool showAlignmentCube = false;
@@ -60,7 +58,8 @@ namespace OffAxisCamera
         internal Vector3 DirRight { get; private set; }
         internal Vector3 DirUp { get; private set; }
         internal Vector3 DirNormal { get; private set; }
-
+        public Vector3 bottomRight;
+        public Vector3 bottomLeft;
         Vector2 previousSize = new Vector2(8, 4.5f);
         Vector2 previousAspectRatio = new Vector2(16, 9);
 
@@ -104,6 +103,7 @@ namespace OffAxisCamera
 
         void Start()
         {
+
             if (Application.isPlaying)
             {
                 alignmentCube = new GameObject("AlignmentCube");
@@ -126,6 +126,7 @@ namespace OffAxisCamera
             }
 
         }
+
 
         GameObject CreateAlignmentQuad()
         {
@@ -169,6 +170,8 @@ namespace OffAxisCamera
         void Update()
         {
 
+            bottomLeft = BottomLeft;
+            bottomRight = BottomRight;
             if (offAxisCameraRig.Screen != null)
             {
                 size.x = offAxisCameraRig.Screen.Width;
@@ -249,10 +252,15 @@ namespace OffAxisCamera
 
         }
 
+
+
         void OnApplicationQuit()
         {
+            transform.parent = null;
             if (Application.isPlaying && alignmentCube != null)
                 DestroyImmediate(alignmentCube);
         }
+
+
     }
 }

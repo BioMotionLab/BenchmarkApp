@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MPDepthCore.Calibration.Screen;
+using OffAxisCamera;
 using UnityEngine;
 
 
@@ -64,12 +65,22 @@ using UnityEngine;
 
     public override void Calibrate()
     {
-        // calibrationUI.SetActive(true);
+        
+    }
+
+    private void Start()
+    {
+        for(int i = 0; i < defaultCalibrations.Count; i++)
+        {
+            allCalibrations.Add(defaultCalibrations[i].screenCalibration);
+        }
     }
 
     public override void SelectCalibration(int selectedIndex)
         {
             currentCalibration = defaultCalibrations[selectedIndex].screenCalibration;
+        currentCalibration.PortraitModeHeight = defaultCalibrations[selectedIndex].screenCalibration.PortraitModeHeight;
+        currentCalibration.PortraitModeWidth = defaultCalibrations[selectedIndex].screenCalibration.PortraitModeWidth;
             calibrationUI.SetActive(false);
         }
 
@@ -85,6 +96,7 @@ using UnityEngine;
         [SerializeField] List<RotatableDeviceConfig> defaultCalibrations = new List<RotatableDeviceConfig>();
 
         [SerializeField] List<SavedRotatableScreenCalibration> allCalibrations;
+    
 
         protected override string Filename => "SavedRotatableScreenConfigurations.json";
 

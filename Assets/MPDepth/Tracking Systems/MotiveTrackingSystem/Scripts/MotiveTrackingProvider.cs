@@ -7,9 +7,9 @@ using UnityEngine;
 public class MotiveTrackingProvider : TrackingCalibrationProvider
 {
     [SerializeField]
-    SavedStreamTrackingConfiguration currentCalibration;
+    SavedMotiveTrackingConfiguration currentCalibration;
 
-    [SerializeField] List<SavedStreamTrackingConfiguration> savedCalibrations;
+    [SerializeField] List<SavedMotiveTrackingConfiguration> savedCalibrations;
 
     [SerializeField] MotiveTrackingCalibration calibrator;
 
@@ -17,11 +17,43 @@ public class MotiveTrackingProvider : TrackingCalibrationProvider
     public override void SelectCalibration(int selectedIndex)
     {
         currentCalibration = savedCalibrations[selectedIndex];
+        calibrationTransform.position = currentCalibration.TrackerOffsetCalibration.Position;
+        calibrationTransform.rotation = Quaternion.Euler(currentCalibration.TrackerOffsetCalibration.Eulers);
     }
 
     public override void Calibrate()
     {
         calibrator.CalculateCalibrationFromTrackingInfo();
+        
+    }
+
+    protected override void FinishSetupAfterLoad()
+    {
+    }
+    public void SaveCalibration(MotiveTrackingProvider.SavedMotiveTrackingConfiguration calibration)
+    {
+        savedCalibrations.Add(calibration);
+        currentCalibration = calibration;
+
+    }
+    protected override void SetCurrentToDefaultCalibration()
+    {
+        currentCalibration = new SavedMotiveTrackingConfiguration();
+
+    }
+
+    protected override void LoadSelfFromJson(string json)
+    {
+        SaveMotiveData saveData = JsonUtility.FromJson<SaveMotiveData>(json);
+        this.currentCalibration = saveData.currentCalibration;
+        this.savedCalibrations = saveData.savedConfigurations;
+    }
+
+    protected override string GetSelfAsJson()
+    {
+        SaveMotiveData saveData = new SaveMotiveData(savedCalibrations, currentCalibration);
+        string json = JsonUtility.ToJson(saveData);
+        return json;
     }
 
     public override TrackerOffsetCalibration GetTrackerOffsetCalibration =>
@@ -30,11 +62,11 @@ public class MotiveTrackingProvider : TrackingCalibrationProvider
     public override SavedTrackerCalibration CurrentTrackerCalibration => currentCalibration;
     public override List<SavedTrackerCalibration> AllCalibrations => new List<SavedTrackerCalibration>(savedCalibrations);
 
-    protected override string Filename => "SavedStreamTrackerConfigurations.json";
+    protected override string Filename => "MotiveTrackerConfigurations.json";
 
 
     [Serializable]
-    public class SavedStreamTrackingConfiguration : SavedTrackerCalibration
+    public class SavedMotiveTrackingConfiguration : SavedTrackerCalibration
     {
 
         public string name = "Default Name";
@@ -49,16 +81,16 @@ public class MotiveTrackingProvider : TrackingCalibrationProvider
     }
 
     [Serializable]
-    public class SaveData
+    public class SaveMotiveData
     {
 
         [SerializeField]
-        public List<SavedStreamTrackingConfiguration> savedConfigurations;
+        public List<SavedMotiveTrackingConfiguration> savedConfigurations;
 
         [SerializeField]
-        public SavedStreamTrackingConfiguration currentCalibration;
+        public SavedMotiveTrackingConfiguration currentCalibration;
 
-        public SaveData(List<SavedStreamTrackingConfiguration> savedConfigurations, SavedStreamTrackingConfiguration currentCalibration)
+        public SaveMotiveData(List<SavedMotiveTrackingConfiguration> savedConfigurations, SavedMotiveTrackingConfiguration currentCalibration)
         {
             this.savedConfigurations = savedConfigurations;
             this.currentCalibration = currentCalibration;

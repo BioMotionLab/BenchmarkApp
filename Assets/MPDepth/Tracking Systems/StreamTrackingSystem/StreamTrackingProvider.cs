@@ -19,11 +19,44 @@ namespace StreamTrackingSystem
         public override void SelectCalibration(int selectedIndex)
         {
             currentCalibration = savedCalibrations[selectedIndex];
+            calibrationTransform.position = currentCalibration.TrackerOffsetCalibration.Position;
+            calibrationTransform.rotation = Quaternion.Euler(currentCalibration.TrackerOffsetCalibration.Eulers);
         }
 
         public override void Calibrate()
         {
             calibrationUI.SetActive(true);
+        }
+
+        public void SaveCalibration(StreamTrackingProvider.SavedStreamTrackingConfiguration calibration)
+        {
+            savedCalibrations.Add(calibration);
+            AllCalibrations.Add(calibration);
+            
+            currentCalibration = calibration;
+            
+        }
+        protected override void FinishSetupAfterLoad()
+        {
+        }
+
+        protected override void SetCurrentToDefaultCalibration()
+        {
+            currentCalibration = new SavedStreamTrackingConfiguration();
+        }
+
+        protected override void LoadSelfFromJson(string json)
+        {
+            SaveData saveData = JsonUtility.FromJson<SaveData>(json);
+            this.currentCalibration = saveData.currentCalibration;
+            this.savedCalibrations = saveData.savedConfigurations;
+        }
+
+        protected override string GetSelfAsJson()
+        {
+            SaveData saveData = new SaveData(savedCalibrations, currentCalibration);
+            string json = JsonUtility.ToJson(saveData);
+            return json;
         }
 
         public override TrackerOffsetCalibration GetTrackerOffsetCalibration =>

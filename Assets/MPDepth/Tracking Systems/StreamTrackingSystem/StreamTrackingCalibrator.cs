@@ -9,7 +9,8 @@ using OffAxisCamera;
 using StreamTrackingSystem;
 using UnityEngine;
 
-namespace StreamTrackingSystem {
+namespace StreamTrackingSystem
+{
     public class StreamTrackingCalibrator : MonoBehaviour
     {
         [SerializeField] MPDepthTrackingSource trackingSource = default;
@@ -26,8 +27,6 @@ namespace StreamTrackingSystem {
         GameObject mainUI;
         OffAxisCameraRig offAxisCameraRig;
         Camera offAxisCamera;
-        [SerializeField] TrackingSystemsManager tsm;
-
 
         private void Awake()
         {
@@ -39,7 +38,7 @@ namespace StreamTrackingSystem {
 
         }
 
-       
+
         public async Task<bool> StartCalibration(StreamTrackingProvider.SavedStreamTrackingConfiguration newCalibration)
         {
             offAxisCameraRig.DisableCameraTracking();
@@ -47,7 +46,7 @@ namespace StreamTrackingSystem {
             calibration = newCalibration;
             calibrating = true;
             cancelled = false;
-            while(calibrating && !cancelled)
+            while (calibrating && !cancelled)
             {
                 await Task.Delay(5);
             }
@@ -65,6 +64,9 @@ namespace StreamTrackingSystem {
 
         public void CalculateCalibrationFromTrackingInfo()
         {
+            calibrationTransform.position = Vector3.zero;
+            calibrationTransform.rotation = Quaternion.Euler(Vector3.zero);
+
             Vector3 camPos = new Vector3(0, 0, manualCalibrationDistance);
             offAxisCamera.transform.localPosition = camPos;
             GameObject tempFace = new GameObject();
@@ -86,7 +88,12 @@ namespace StreamTrackingSystem {
             calibrationTransform.rotation = tempOffset.transform.rotation;
 
             Destroy(tempFace);
-            // Destroy(tempFace);
+            calibration = new StreamTrackingProvider.SavedStreamTrackingConfiguration();
+            calibration.name = System.DateTime.Now.ToString();
+            calibration.TrackerOffsetCalibration.Position = calibrationTransform.position;
+            calibration.TrackerOffsetCalibration.Eulers = calibrationTransform.rotation.eulerAngles;
+            GetComponent<StreamTrackingProvider>().SaveCalibration(calibration);
+            offAxisCameraRig.EnableCameraTracking();
         }
 
 

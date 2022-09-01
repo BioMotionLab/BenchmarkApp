@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -729,11 +729,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   motiveSource: {fileID: 160100461985517032}
-  streamSource: {fileID: 0}
-  streamCameraData: {fileID: 0}
+  streamSource: {fileID: 66054510687705930}
+  streamCameraData: {fileID: 5762138543888893587}
   numberOfSamples: 10
-  calibrationOffset: {fileID: 0}
-  trackingManager: {fileID: 0}
+  calibrationOffset: {fileID: 66054509704448214}
+  trackingManager: {fileID: 5762138541817195027}
   i: 0
 --- !u!4 &791599878
 Transform:

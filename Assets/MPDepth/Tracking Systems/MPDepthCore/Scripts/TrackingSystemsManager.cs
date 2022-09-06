@@ -30,7 +30,7 @@ namespace MPDepthCore
         [SerializeField] Transform offAxisCam;
         [SerializeField] public Transform otherPlayerCalibration;
         public TrackingSystem CurrentTrackingSystem => currentTrackingSystem;
-
+        public Vector3 calibratedPosition;
         public event MPDepthTrackingSource.TrackingDataUpdatedEvent TrackingDataUpdated;
 
         public List<TrackingSystem> TrackingSystems => trackingSystems;
@@ -70,7 +70,7 @@ namespace MPDepthCore
         void TrackingDataWasUpdated(MPDepthTrackingData data)
         {
             //TrackingDataUpdated?.Invoke(data);
-            Vector3 calibratedPosition = CalibrateTrackingData.instance.CalibrateData(data, calibrationTransform)[0];
+            calibratedPosition = CalibrateTrackingData.instance.CalibrateData(data, calibrationTransform)[0];
             ApplyCalibration(data);
             offAxisCameraRig.UpdateCameraLocation(calibratedPosition);
             //offAxisCameraRig.UpdateCameraLocation(data.CameraTrackingData.Position);

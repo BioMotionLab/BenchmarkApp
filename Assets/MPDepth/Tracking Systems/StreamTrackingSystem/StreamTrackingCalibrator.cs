@@ -67,10 +67,10 @@ namespace StreamTrackingSystem
             calibrationTransform.position = Vector3.zero;
             calibrationTransform.rotation = Quaternion.Euler(Vector3.zero);
 
-            Vector3 camPos = new Vector3(0, 0, manualCalibrationDistance);
+            Vector3 camPos = new Vector3(0, 0, -manualCalibrationDistance);
             offAxisCamera.transform.localPosition = camPos;
             GameObject tempFace = new GameObject();
-            tempFace.transform.position = offAxisCamera.transform.localPosition;
+            tempFace.transform.position = new Vector3(0, 0, 0);
             Vector3 flippedEulers = -trackingData.CameraTrackingData.Eulers;
             tempFace.transform.eulerAngles = new Vector3(0, 180, 0) - new Vector3(flippedEulers.x, -flippedEulers.y, flippedEulers.z);
             tempFace.name = "tempFace";
@@ -84,10 +84,10 @@ namespace StreamTrackingSystem
             tempOffset.transform.localEulerAngles = Vector3.zero;
 
 
-            calibrationTransform.position = new Vector3(tempOffset.transform.position.x, tempOffset.transform.position.y, tempOffset.transform.position.z * -1);
+            calibrationTransform.position = new Vector3(tempOffset.transform.position.x, tempOffset.transform.position.y, (tempOffset.transform.position.z-manualCalibrationDistance));
             calibrationTransform.rotation = tempOffset.transform.rotation;
 
-            Destroy(tempFace);
+            //Destroy(tempFace);
             calibration = new StreamTrackingProvider.SavedStreamTrackingConfiguration();
             calibration.name = System.DateTime.Now.ToString();
             calibration.TrackerOffsetCalibration.Position = calibrationTransform.position;

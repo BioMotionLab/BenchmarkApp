@@ -74,7 +74,7 @@ public class DataOutput : MonoBehaviour
             {
                 ARKitRawPosition = streamCameraData.ReceivedData.CameraTrackingData.Position;
                 ARKitRawRotation = streamCameraData.ReceivedData.CameraTrackingData.Eulers;
-                calibratedPosition = streamSource.CurrentCalibratedTrackingData.CameraTrackingData.Position;
+                calibratedPosition = streamSource.calibratedPosition;
                 calibratedRotation = streamSource.CurrentCalibratedTrackingData.CameraTrackingData.Eulers;
             }
 
@@ -133,6 +133,9 @@ public class DataOutput : MonoBehaviour
 
             writer.Close();
         }
+        // ar kit head location
+      //  Debug.Log("AR Kit Calibrated Head Location: " + streamSource.calibratedPosition.x + ", " + streamSource.calibratedPosition.y + ", " + streamSource.calibratedPosition.z);
+       // Debug.Log("AR Kit Calibrated Head Rotation: " + streamSource.CurrentCalibratedTrackingData.CameraTrackingData.Eulers.x + ", " + streamSource.CurrentCalibratedTrackingData.CameraTrackingData.Eulers.y + ", " + streamSource.CurrentCalibratedTrackingData.CameraTrackingData.Eulers.z);
 
     }
 
